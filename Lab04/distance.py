@@ -42,6 +42,8 @@ try:
 		infot = mqttc.publish("sensor/distance", distance)
 		infot.wait_for_publish()
 
+		time.sleep(2)
+
 except KeyboardInterrupt:
 	print("Finished!")
 	mqttc.loop_stop()
