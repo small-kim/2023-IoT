@@ -1,8 +1,8 @@
-import RPi.gpio as gpio
+import RPi.GPIO as gpio
 import paho.mqtt.client as mqtt
 
 gpio.setmode(gpio.BCM)
-led = [5, 6, 7]
+led = [23, 24, 25]
 for i in led:
 	gpio.setup(i, gpio.OUT)
 
@@ -17,21 +17,16 @@ def on_message(client, userdata, msg):
 	print("Topic: " + msg.topic + ", Led Color: " + msg.payload.decode("utf-8"))
 	led_color = msg.payload.decode("utf-8")
 	if led_color == "Off":
-		for i in led:
-			gpio.output(i, False)
+		gpio.output(led, False)
 	elif led_color == "green":
-		for i in led:
-			gpio.output(i, False)
-		gpio.output(5, True)
+		gpio.output(led, False)
+		gpio.output(25, True)
 	elif led_color == "yellow":
-		for i in led:
-			gpio.output(i, False)
-		gpio.output(6, True)
+		gpio.output(led, False)
+		gpio.output(24, True)
 	elif led_color == "red":
-		for i in led:
-			gpio.output(i, False)
-		gpio.output(7, True)
-
+		gpio.output(led, False)
+		gpio.output(23, True)
 
 client = mqtt.Client()
 client.on_connect = on_connect

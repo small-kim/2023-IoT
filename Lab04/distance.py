@@ -2,11 +2,13 @@ import RPi.GPIO as gpio
 import paho.mqtt.client as mqtt
 import time
 
-motion = 5
-trig = 13
-echo = 19
+motion = 12
+trig =  20
+echo = 21
 
-gpio.setmode(GPIO.BCM)
+gpio.setwarnings(False)
+gpio.setmode(gpio.BCM)
+
 gpio.setup(motion, gpio.IN)
 gpio.setup(trig, gpio.OUT)
 gpio.setup(echo, gpio.IN)
@@ -18,9 +20,7 @@ mqttc.loop_start()
 
 try:
 	while True:
-		motion_state = gpio.input(motion)
-
-		if motion_state == TRUE:
+		if gpio.input(motion):
 			gpio.output(trig, False)
 			time.sleep(1)
 
@@ -28,9 +28,9 @@ try:
 			time.sleep(0.000001)
 			gpio.output(trig, False)
 
-			while gpio.input(echo_pin) == 0:
+			while gpio.input(echo) == 0:
 				pulse_start = time.time()
-			while gpio.input(echo_pin) == 1:
+			while gpio.input(echo) == 1:
 				pulse_end = time.time()
 
 			pulse_duration = pulse_end - pulse_start
@@ -39,6 +39,7 @@ try:
 		else:
 			distance = 10000
 
+		print(distance)
 		infot = mqttc.publish("sensor/distance", distance)
 		infot.wait_for_publish()
 

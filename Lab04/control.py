@@ -7,7 +7,7 @@ def on_connect(client, userdata, flags, rc):
 
 def on_message(client, userdata, msg):
 	print("Topic: " + msg.topic + ", Distance: " + msg.payload.decode("utf-8"))
-	distance = int( msg.payload.decode("utf-8"))
+	distance = float(msg.payload.decode("utf-8"))
 	if distance == 10000:
 		led_color = "Off"
 	elif distance >= 40:
